@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/txtArticleTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Best Android apps" />
+
+    <TextView
+        android:id="@+id/txtSectionName"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/txtArticleTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtArticleTitle"
+        tools:text="Guardian mobile" />
+
+    <TextView
+        android:id="@+id/txtSectionID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtArticleTitle"
+        tools:text="mobile" />
+
+    <TextView
+        android:id="@+id/txtDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/raleway_light_italic"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSectionName"
+        tools:text="Information about the Guardian news app for Android" />
+</android.support.constraint.ConstraintLayout>
