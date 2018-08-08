@@ -1,14 +1,15 @@
 package com.sylvesterllc.newapps1.Models;
 
+import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.google.gson.Gson;
-import com.sylvesterllc.newapps1.Infrastructure.NewsViewModelFactory;
 import com.sylvesterllc.newapps1.Interfaces.onDataUpdateListener;
 
 import java.io.BufferedInputStream;
@@ -125,6 +126,8 @@ public class NewsViewModel extends AndroidViewModel {
 
                     catch (IOException ioe) {
 
+                        String today = ioe.getMessage();
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -138,11 +141,13 @@ public class NewsViewModel extends AndroidViewModel {
     }
 
     private void loadNewsArticles(final String  search,
-                                  final onDataUpdateListener dataChange) {
+                                  final onDataUpdateListener dataChange,
+                                  final Activity context) {
 
         if (newsArticlesList != null && newsArticlesList.getValue() != null) {
             newsArticlesList.getValue().clear();
         }
+
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -177,9 +182,22 @@ public class NewsViewModel extends AndroidViewModel {
                             result = sb.toString();
                             GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
 
-                            newsArticlesList.postValue(ad.response.results);
+                            ArrayList<NewsArticle> articles = ad.response.results;
 
-                            dataChange.onDataChange();
+                            newsArticlesList.postValue(articles);
+
+                            if (articles.size() == 0) {
+
+                            }
+
+                            context.runOnUiThread(new Runnable() {
+                                public void run()
+                                {
+                                    dataChange.onDataChange();
+                                }
+                            });
+
+
 
                             //adapter.notifyDataSetChanged();
 
@@ -222,10 +240,10 @@ public class NewsViewModel extends AndroidViewModel {
 
     }
 
-    public void updateSearchText(String value, RecyclerView.Adapter adapter) {
+    public void updateSearchText(String value, RecyclerView.Adapter adapter, Activity context) {
 
         searchText.setValue(value);
-        loadNewsArticles(searchText.toString(), new Linker(adapter));
+        loadNewsArticles(searchText.toString(), new Linker(adapter), context);
 
     }
 
@@ -239,7 +257,13 @@ public class NewsViewModel extends AndroidViewModel {
 
         @Override
         public void onDataChange() {
-            adapter.notifyDataSetChanged();
+            try {
+                adapter.notifyDataSetChanged();
+                Log.d("HELPD", "adapter Data set has changed from Linker class");
+            }
+            catch(IndexOutOfBoundsException iox) {
+
+            }
         }
     }
 

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -55,16 +56,36 @@ public class MainActivity extends AppCompatActivity implements
         txtSearchNews.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+
+                // Log.d("HelpD", String.valueOf(hasFocus));
+
                 if (!hasFocus) {
-                    String temp = txtSearchNews.getText().toString();
-                    newsViewModel.updateSearchText(temp, mAdapter);
 
                     InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                    if (imm.isAcceptingText()) {
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
                 }
             }
         });
 
+    }
+
+    public void getNews(View view) {
+        txtSearchNews = findViewById(R.id.txtSearchNews);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        if (imm.isAcceptingText()) {
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        }
+        String temp = txtSearchNews.getText().toString();
+        newsViewModel.updateSearchText(temp, mAdapter, this);
+//        RecyclerView.Adapter aaa =   mRecycleView.getAdapter();
+//        aaa.notify();
+
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -86,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mRecycleView.setAdapter(mAdapter);
 
-        mRecycleView.hasFixedSize();
+        // mRecycleView.hasFixedSize();
 
         mRecycleView.setLayoutManager(mlayoutManager);
 

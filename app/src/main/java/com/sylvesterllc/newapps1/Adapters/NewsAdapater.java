@@ -1,28 +1,18 @@
 package com.sylvesterllc.newapps1.Adapters;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.sylvesterllc.newapps1.Interfaces.onDataChangerListener;
 import com.sylvesterllc.newapps1.MainActivity;
 import com.sylvesterllc.newapps1.Models.GuardApiData;
 import com.sylvesterllc.newapps1.Models.NewsArticle;
 import com.sylvesterllc.newapps1.R;
-import com.sylvesterllc.newapps1.Services.NewsService;
-
-import java.security.Guard;
 import java.util.ArrayList;
 
 public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> {
@@ -97,7 +87,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Log.d("HelpD", att.webTitle + " Item Has been clicked on Recyclerer");
                 }
             });
         }

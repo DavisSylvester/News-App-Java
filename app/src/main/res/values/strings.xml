@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewAppS1</string>
+    <string name="btnGetNews">Get News</string>
 </resources>
