@@ -2,6 +2,8 @@ package com.sylvesterllc.newapps1.Adapters;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -88,6 +90,13 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     Log.d("HelpD", att.webTitle + " Item Has been clicked on Recyclerer");
+
+
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(att.webUrl));
+                    i.putExtra("url", att.webUrl);
+                    context.startActivity(i);
+
+
                 }
             });
         }
