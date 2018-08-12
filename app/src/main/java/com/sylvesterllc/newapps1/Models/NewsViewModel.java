@@ -9,8 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.google.gson.Gson;
+// import com.google.gson.Gson;
 import com.sylvesterllc.newapps1.Interfaces.onDataUpdateListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -50,7 +53,7 @@ public class NewsViewModel extends AndroidViewModel {
 
         searchHintText.setValue("Enter New Search");
 
-        loadNewsArticlesInitially(searchText.toString());
+        // loadNewsArticles(searchText.toString(), new Linker());
     }
 
     public LiveData<ArrayList<NewsArticle>> getNewsArticles() {
@@ -100,9 +103,10 @@ public class NewsViewModel extends AndroidViewModel {
                             }
 
                             result = sb.toString();
-                            GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
+                            // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
 
-                            newsArticlesList.postValue(ad.response.results);
+
+                            newsArticlesList.postValue(fromJsonString(result));
 
 
                         } catch (IOException ioe) {
@@ -140,7 +144,7 @@ public class NewsViewModel extends AndroidViewModel {
 
     }
 
-    private void loadNewsArticles(final String  search,
+    public void loadNewsArticles(final String  search,
                                   final onDataUpdateListener dataChange,
                                   final Activity context) {
 
@@ -180,9 +184,11 @@ public class NewsViewModel extends AndroidViewModel {
                             }
 
                             result = sb.toString();
-                            GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
+                            // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
 
-                            ArrayList<NewsArticle> articles = ad.response.results;
+                            ArrayList<NewsArticle> articles = fromJsonString(result);
+
+                            //ArrayList<NewsArticle> articles = ad.response.results;
 
                             newsArticlesList.postValue(articles);
 
@@ -238,6 +244,56 @@ public class NewsViewModel extends AndroidViewModel {
 
         this.searchText.setValue(searchText);
 
+    }
+
+    private ArrayList<NewsArticle> fromJsonString(String json) {
+
+        ArrayList<NewsArticle> returnResults = new ArrayList<>();
+
+        try {
+            JSONObject myObj = new JSONObject(json);
+
+            String response = myObj.getString("response");
+
+            JSONObject tempResult = new JSONObject(response);
+
+            JSONArray results = tempResult.getJSONArray("results");
+
+            if (results.length() == 0) {
+                return new ArrayList<>();
+
+            }
+
+
+
+            for (int i = 0; i < results.length(); i++) {
+
+                JSONObject tempNA = results.getJSONObject(i);
+
+                NewsArticle na = new NewsArticle();
+
+                na.id = tempNA.getString("id");
+                na.apiUrl = tempNA.getString("apiUrl");
+                na.description = (tempNA.has("description")) ? tempNA.getString("description") : "";
+                na.webUrl = tempNA.getString("webUrl");
+                na.webTitle = tempNA.getString("webTitle");
+                na.sectionName = tempNA.getString("sectionName");
+                na.type = tempNA.getString("type");
+
+                returnResults.add(na);
+
+            }
+
+            return returnResults;
+
+        }
+
+        catch(Exception ex) {
+
+            String aaa = ex.getMessage();
+
+        }
+return returnResults;
     }
 
     public void updateSearchText(String value, RecyclerView.Adapter adapter, Activity context) {

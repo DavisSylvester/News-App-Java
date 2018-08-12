@@ -24,8 +24,7 @@ import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
 
 
 
-public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<String>
+public class MainActivity extends AppCompatActivity
 {
 
     private RecyclerView mRecycleView;
@@ -107,26 +106,15 @@ public class MainActivity extends AppCompatActivity implements
 
         mRecycleView.setAdapter(mAdapter);
 
-        // mRecycleView.hasFixedSize();
+        mRecycleView.hasFixedSize();
 
         mRecycleView.setLayoutManager(mlayoutManager);
 
-    }
+        NewsViewModel nvm = new NewsViewModel(getApplication());
 
-
-    @NonNull
-    @Override
-    public Loader<String> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new NewsArticleLoader(this);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<String> loader, String s) {
+        newsViewModel.loadNewsArticles("murder", new NewsViewModel(getApplication()).new Linker(mAdapter), this);
+        //nvm.loadNewsArticles("Computer", new NewsViewModel(getApplication()).new Linker(mAdapter), this);
 
     }
 
-    @Override
-    public void onLoaderReset(@NonNull Loader<String> loader) {
-
-    }
 }

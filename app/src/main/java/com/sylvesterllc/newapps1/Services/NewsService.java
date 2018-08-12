@@ -5,16 +5,18 @@ import android.content.Context;
 import android.util.Log;
 
 
-import com.github.kittinunf.fuel.Fuel;
-import com.github.kittinunf.fuel.core.FuelError;
-import com.github.kittinunf.fuel.core.Handler;
-import com.github.kittinunf.fuel.core.Request;
-import com.github.kittinunf.fuel.core.Response;
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
+//import com.github.kittinunf.fuel.Fuel;
+//import com.github.kittinunf.fuel.core.FuelError;
+//import com.github.kittinunf.fuel.core.Handler;
+//import com.github.kittinunf.fuel.core.Request;
+//import com.github.kittinunf.fuel.core.Response;
+//import com.google.gson.Gson;
+//import com.google.gson.JsonParser;
 import com.sylvesterllc.newapps1.Interfaces.onDataChangerListener;
 import com.sylvesterllc.newapps1.Loaders.NewsArticleLoader;
 import com.sylvesterllc.newapps1.Models.GuardApiData;
+
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -41,46 +43,55 @@ public class NewsService {
         context = ctx;
     }
 
-    public void GetNews(final onDataChangerListener listener) {
-
-        String tempResult = "";
-        final String result = "";
-
-        try {
-
-            Fuel.get(API_PATH).responseString(new Handler<String>() {
-                @Override
-                public void failure(Request request, Response response, FuelError error) {
-                    //do something when it is failure
-
-                    Log.d("HELP333", error.toString());
-
-                }
-
-                @Override
-                public void success(Request request, Response response, String data) {
-                    //do something when it is successful
-                    //Log.d("HELP", request.toString());
-                    Log.d("HELP", response.toString());
-                    Log.d("HELP1", data);
-
-                    Gson gson = new Gson();
-                    JsonParser jsonParser = new JsonParser();
-                    GuardApiData aa =  gson.fromJson(data, GuardApiData.class);
-                    Log.d("HELP2", aa.response.results.get(0).webTitle);
-
-                    newsFeed = aa;
-
-                    listener.onDataChange(aa.response.results);
-
-
-                }
-            });
-        }
-        catch (Exception e){
-    Exception aaa = e;
-        }
-    }
+//    public void GetNews(final onDataChangerListener listener) {
+//
+//        String tempResult = "";
+//        final String result = "";
+//
+//        try {
+//
+//            Fuel.get(API_PATH).responseString(new Handler<String>() {
+//                @Override
+//                public void failure(Request request, Response response, FuelError error) {
+//                    //do something when it is failure
+//
+//                    Log.d("HELP333", error.toString());
+//
+//                }
+//
+//                @Override
+//                public void success(Request request, Response response, String data) {
+//                    //do something when it is successful
+//                    //Log.d("HELP", request.toString());
+//                    Log.d("HELP", response.toString());
+//                    Log.d("HELP1", data);
+//
+//                    Gson gson = new Gson();
+//                    JsonParser jsonParser = new JsonParser();
+//
+//                    try {
+//                        JSONObject myObj = new JSONObject(data);
+//                    }
+//
+//                    catch(Exception e) {
+//                        String ss = e.getMessage();
+//                    }
+//
+//                    GuardApiData aa =  gson.fromJson(data, GuardApiData.class);
+//                    Log.d("HELP2", aa.response.results.get(0).webTitle);
+//
+//                    newsFeed = aa;
+//
+//                    listener.onDataChange(aa.response.results);
+//
+//
+//                }
+//            });
+//        }
+//        catch (Exception e){
+//    Exception aaa = e;
+//        }
+//    }
 
     public void GetNewsOverHttps() {
 
