@@ -68,6 +68,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
         TextView sectionName;
         TextView sectionID;
         TextView desc;
+        TextView webTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -76,7 +77,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             sectionName = itemView.findViewById(R.id.txtSectionName);
             sectionID = itemView.findViewById(R.id.txtSectionID);
             desc = itemView.findViewById(R.id.txtDesc);
-
+            webTitle = itemView.findViewById(R.id.txtWebTitle);
         }
 
         public void bindItem(final NewsArticle att, final Context context) {
@@ -85,6 +86,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             sectionName.setText(att.sectionName);
             sectionID.setText(att.sectionId);
             desc.setText(att.description);
+            webTitle.setText(att.webTitle);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

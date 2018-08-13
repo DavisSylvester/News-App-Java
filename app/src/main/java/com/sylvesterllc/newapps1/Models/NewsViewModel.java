@@ -5,12 +5,19 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 // import com.google.gson.Gson;
 import com.sylvesterllc.newapps1.Interfaces.onDataUpdateListener;
+import com.sylvesterllc.newapps1.MainActivity;
+import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,10 +36,15 @@ import java.util.ArrayList;
 public class NewsViewModel extends AndroidViewModel {
 
     private onDataUpdateListener listener;
+    public ActivityMainBinding binding;
 
     public MutableLiveData<String> searchText;
     public MutableLiveData<String> searchHintText;
     public MutableLiveData<ArrayList<NewsArticle>> newsArticlesList;
+    public int showNoData = View.VISIBLE;
+    public int showRecyclerView = View.VISIBLE;
+    public MutableLiveData<String> noRecordText = new MutableLiveData<>();
+
 
 
 
@@ -54,6 +66,15 @@ public class NewsViewModel extends AndroidViewModel {
         searchHintText.setValue("Enter New Search");
 
         // loadNewsArticles(searchText.toString(), new Linker());
+    }
+
+    public void setShowNoData(int val) {
+        showNoData = val;
+    }
+
+    public int getShowNoData() {
+        return showNoData;
+
     }
 
     public LiveData<ArrayList<NewsArticle>> getNewsArticles() {
@@ -152,92 +173,91 @@ public class NewsViewModel extends AndroidViewModel {
             newsArticlesList.getValue().clear();
         }
 
-        Thread thread = new Thread(new Runnable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-            @Override
-            public void run() {
-                try  {
+        if (activeNetworkInfo.isConnected()) {
 
-                    String searchString = searchText.getValue().toString();
+            Thread thread = new Thread(new Runnable() {
 
-                    String API_PATH =
-                    String.format("https://content.guardianapis.com/tags?q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
-
-
-                    URL url;
-                    String result = "";
-                    HttpURLConnection urlConnection;
-
+                @Override
+                public void run() {
                     try {
-                        url = new URL(API_PATH);
-                        urlConnection = (HttpURLConnection) url.openConnection();
+
+                        String searchString = searchText.getValue().toString();
+
+                        String API_PATH =
+                                String.format("https://content.guardianapis.com/tags?q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f&show-tags=contributor", searchString);
+
+
+                        URL url;
+                        String result = "";
+                        HttpURLConnection urlConnection;
 
                         try {
-                            InputStream is = new BufferedInputStream(urlConnection.getInputStream());
+                            url = new URL(API_PATH);
+                            urlConnection = (HttpURLConnection) url.openConnection();
 
-                            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                            String aa = "";
-                            StringBuilder sb = new StringBuilder();
+                            try {
+                                InputStream is = new BufferedInputStream(urlConnection.getInputStream());
 
-                            while ((aa = br.readLine()) != null) {
-                                sb.append(aa);
-                            }
+                                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                                String aa = "";
+                                StringBuilder sb = new StringBuilder();
 
-                            result = sb.toString();
-                            // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
-
-                            ArrayList<NewsArticle> articles = fromJsonString(result);
-
-                            //ArrayList<NewsArticle> articles = ad.response.results;
-
-                            newsArticlesList.postValue(articles);
-
-                            if (articles.size() == 0) {
-
-                            }
-
-                            context.runOnUiThread(new Runnable() {
-                                public void run()
-                                {
-                                    dataChange.onDataChange();
+                                while ((aa = br.readLine()) != null) {
+                                    sb.append(aa);
                                 }
-                            });
+
+                                result = sb.toString();
+                                // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
+
+                                ArrayList<NewsArticle> articles = fromJsonString(result);
+
+                                //ArrayList<NewsArticle> articles = ad.response.results;
+
+                                newsArticlesList.postValue(articles);
+
+                                context.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        dataChange.onDataChange();
+                                        if (newsArticlesList.getValue().size() == 0) {
+                                            noRecordText.setValue("No Articles Found");
+                                        } else {
+                                            noRecordText.setValue("");
+                                        }
+
+                                    }
+                                });
 
 
+                                //adapter.notifyDataSetChanged();
 
-                            //adapter.notifyDataSetChanged();
+                            } catch (IOException ioe) {
+
+                            } catch (Exception ex) {
+
+                                String aaa = ex.getMessage();
+
+                            } finally {
+                                urlConnection.disconnect();
+                            }
+                        } catch (MalformedURLException mal) {
 
                         } catch (IOException ioe) {
 
                         }
-
-                        catch (Exception ex){
-
-                            String aaa = ex.getMessage();
-
-                        }
-                        finally {
-                            urlConnection.disconnect();
-                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-
-                    catch (MalformedURLException mal) {
-
-                    }
-
-                    catch (IOException ioe) {
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
 
-        thread.start();
+            thread.start();
 
-
+        }
+        context.getSharedPreferences("deaths", Context.MODE_PRIVATE).getAll();
     }
 
     public void setSearchText(String searchText) {
@@ -276,7 +296,7 @@ public class NewsViewModel extends AndroidViewModel {
                 na.apiUrl = tempNA.getString("apiUrl");
                 na.description = (tempNA.has("description")) ? tempNA.getString("description") : "";
                 na.webUrl = tempNA.getString("webUrl");
-                na.webTitle = tempNA.getString("webTitle");
+                na.webTitle = (tempNA.has("webTitle")) ? tempNA.getString("webTitle") : "";
                 na.sectionName = tempNA.getString("sectionName");
                 na.type = tempNA.getString("type");
 
@@ -303,21 +323,50 @@ return returnResults;
 
     }
 
+
+
     public class Linker implements onDataUpdateListener {
 
         public RecyclerView.Adapter adapter;
+        private Context context;
 
         public Linker(RecyclerView.Adapter apt) {
             adapter = apt;
+            this.context = context;
         }
 
         @Override
         public void onDataChange() {
             try {
                 adapter.notifyDataSetChanged();
+
+                if (newsArticlesList.getValue() != null &&  newsArticlesList.getValue().size() == 0) {
+                    int aaaa = newsArticlesList.getValue().size();
+
+
+
+                    noRecordText.setValue("No Articles Found");
+
+                    binding.notifyChange();
+
+                } else {
+                    noRecordText.setValue("");
+
+                    binding.notifyChange();
+                }
+
+
                 Log.d("HELPD", "adapter Data set has changed from Linker class");
+                Log.d("HELPD", "No Data " + showNoData );
             }
             catch(IndexOutOfBoundsException iox) {
+
+                String aaaa = iox.getMessage();
+
+            }
+            catch(Exception iox) {
+
+                String aaaa = iox.getMessage();
 
             }
         }

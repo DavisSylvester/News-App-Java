@@ -35,11 +35,14 @@ public class MainActivity extends AppCompatActivity
     private NewsViewModel newsViewModel;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+
 //        setContentView(R.layout.activity_main);
         mRecycleView = findViewById(R.id.rvNewsList);
 
@@ -94,6 +97,8 @@ public class MainActivity extends AppCompatActivity
 
         binding.setLifecycleOwner(this);
 
+        newsViewModel.binding = binding;
+
         String aa = newsViewModel.searchText.toString();
 
         newsViewModel.getNewsArticles();
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         NewsViewModel nvm = new NewsViewModel(getApplication());
 
         newsViewModel.loadNewsArticles("murder", new NewsViewModel(getApplication()).new Linker(mAdapter), this);
-        //nvm.loadNewsArticles("Computer", new NewsViewModel(getApplication()).new Linker(mAdapter), this);
+
 
     }
 
