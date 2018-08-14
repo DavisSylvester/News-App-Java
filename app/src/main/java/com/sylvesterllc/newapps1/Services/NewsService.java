@@ -43,56 +43,6 @@ public class NewsService {
         context = ctx;
     }
 
-//    public void GetNews(final onDataChangerListener listener) {
-//
-//        String tempResult = "";
-//        final String result = "";
-//
-//        try {
-//
-//            Fuel.get(API_PATH).responseString(new Handler<String>() {
-//                @Override
-//                public void failure(Request request, Response response, FuelError error) {
-//                    //do something when it is failure
-//
-//                    Log.d("HELP333", error.toString());
-//
-//                }
-//
-//                @Override
-//                public void success(Request request, Response response, String data) {
-//                    //do something when it is successful
-//                    //Log.d("HELP", request.toString());
-//                    Log.d("HELP", response.toString());
-//                    Log.d("HELP1", data);
-//
-//                    Gson gson = new Gson();
-//                    JsonParser jsonParser = new JsonParser();
-//
-//                    try {
-//                        JSONObject myObj = new JSONObject(data);
-//                    }
-//
-//                    catch(Exception e) {
-//                        String ss = e.getMessage();
-//                    }
-//
-//                    GuardApiData aa =  gson.fromJson(data, GuardApiData.class);
-//                    Log.d("HELP2", aa.response.results.get(0).webTitle);
-//
-//                    newsFeed = aa;
-//
-//                    listener.onDataChange(aa.response.results);
-//
-//
-//                }
-//            });
-//        }
-//        catch (Exception e){
-//    Exception aaa = e;
-//        }
-//    }
-
     public void GetNewsOverHttps() {
 
         new NewsArticleLoader(context).loadInBackground();

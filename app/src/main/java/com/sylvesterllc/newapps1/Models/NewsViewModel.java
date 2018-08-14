@@ -124,9 +124,6 @@ public class NewsViewModel extends AndroidViewModel {
                             }
 
                             result = sb.toString();
-                            // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
-
-
 
                             newsArticlesList.postValue(fromJsonString(result));
 
@@ -293,7 +290,7 @@ public class NewsViewModel extends AndroidViewModel {
                 na.sectionName = tempNA.getString("sectionName");
                 na.type = tempNA.getString("type");
 
-                na.tags =  getTags(tempNA);
+                na.tags = getTags(tempNA);
 
                 returnResults.add(na);
 
@@ -320,7 +317,7 @@ public class NewsViewModel extends AndroidViewModel {
         try {
             JSONArray array = tempNA.getJSONArray("tags");
 
-            for(int i = 0; i < array.length(); i++) {
+            for (int i = 0; i < array.length(); i++) {
 
                 JSONObject obj = array.getJSONObject(i);
 
@@ -339,12 +336,9 @@ public class NewsViewModel extends AndroidViewModel {
             }
 
 
-        }
-        catch (JSONException jsone) {
+        } catch (JSONException jsone) {
 
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
 
