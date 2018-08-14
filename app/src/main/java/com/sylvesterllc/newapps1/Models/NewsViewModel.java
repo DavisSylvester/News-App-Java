@@ -64,8 +64,6 @@ public class NewsViewModel extends AndroidViewModel {
         searchText.setValue("computer");
 
         searchHintText.setValue("Enter New Search");
-
-        // loadNewsArticles(searchText.toString(), new Linker());
     }
 
     public void setShowNoData(int val) {
@@ -181,7 +179,6 @@ public class NewsViewModel extends AndroidViewModel {
                         String API_PATH =
                                 String.format("https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
 
-
                         URL url;
                         String result = "";
                         HttpURLConnection urlConnection;
@@ -202,11 +199,8 @@ public class NewsViewModel extends AndroidViewModel {
                                 }
 
                                 result = sb.toString();
-                                // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
 
                                 ArrayList<NewsArticle> articles = fromJsonString(result);
-
-                                //ArrayList<NewsArticle> articles = ad.response.results;
 
                                 newsArticlesList.postValue(articles);
 
@@ -214,7 +208,7 @@ public class NewsViewModel extends AndroidViewModel {
                                     public void run() {
                                         dataChange.onDataChange();
                                         if (newsArticlesList.getValue().size() == 0) {
-                                            noRecordText.setValue("No Articles Found");
+                                            noRecordText.setValue("No Articles Found!  Please Enter a new Search Topic and click 'Get News' ");
                                         } else {
                                             noRecordText.setValue("");
                                         }
