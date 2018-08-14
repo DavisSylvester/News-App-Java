@@ -86,7 +86,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             sectionName.setText(att.sectionName);
             sectionID.setText(att.sectionId);
             desc.setText(att.description);
-            webTitle.setText(att.webTitle);
+            webTitle.setText((att.tags.size() == 0) ? "" : att.tags.get(0).webTitle);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

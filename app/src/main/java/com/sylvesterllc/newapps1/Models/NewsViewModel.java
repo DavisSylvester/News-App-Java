@@ -20,6 +20,7 @@ import com.sylvesterllc.newapps1.MainActivity;
 import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -41,11 +42,9 @@ public class NewsViewModel extends AndroidViewModel {
     public MutableLiveData<String> searchText;
     public MutableLiveData<String> searchHintText;
     public MutableLiveData<ArrayList<NewsArticle>> newsArticlesList;
-    public int showNoData = View.VISIBLE;
-    public int showRecyclerView = View.VISIBLE;
+    public MutableLiveData<Integer> showNoData = new MutableLiveData<>();
+    public MutableLiveData<Integer> showRecyclerView = new MutableLiveData<>();
     public MutableLiveData<String> noRecordText = new MutableLiveData<>();
-
-
 
 
     public NewsViewModel(@NonNull Application application) {
@@ -59,7 +58,8 @@ public class NewsViewModel extends AndroidViewModel {
         searchText = new MutableLiveData<>();
         searchHintText = new MutableLiveData<>();
         newsArticlesList = new MutableLiveData<>();
-
+        showNoData.setValue(View.VISIBLE);
+        showRecyclerView.setValue(View.VISIBLE);
 
         searchText.setValue("computer");
 
@@ -69,11 +69,11 @@ public class NewsViewModel extends AndroidViewModel {
     }
 
     public void setShowNoData(int val) {
-        showNoData = val;
+        showNoData.setValue(val);
     }
 
     public int getShowNoData() {
-        return showNoData;
+        return showNoData.getValue();
 
     }
 
@@ -87,7 +87,7 @@ public class NewsViewModel extends AndroidViewModel {
 
     }
 
-    private void loadNewsArticlesInitially(final String  search) {
+    private void loadNewsArticlesInitially(final String search) {
 
         if (newsArticlesList != null && newsArticlesList.getValue() != null) {
             newsArticlesList.getValue().clear();
@@ -96,12 +96,12 @@ public class NewsViewModel extends AndroidViewModel {
 
             @Override
             public void run() {
-                try  {
+                try {
 
                     String searchString = searchText.getValue().toString();
 
                     String API_PATH =
-                            String.format("https://content.guardianapis.com/tags?q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
+                            String.format("https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
 
 
                     URL url;
@@ -127,29 +127,23 @@ public class NewsViewModel extends AndroidViewModel {
                             // GuardApiData ad =  new Gson().fromJson(result, GuardApiData.class);
 
 
+
                             newsArticlesList.postValue(fromJsonString(result));
 
+                            Log.d("HELPD", fromJsonString(result).toString());
 
                         } catch (IOException ioe) {
 
-                        }
-
-                        catch (Exception ex){
+                        } catch (Exception ex) {
 
                             String aaa = ex.getMessage();
 
-                        }
-                        finally {
+                        } finally {
                             urlConnection.disconnect();
                         }
-                    }
+                    } catch (MalformedURLException mal) {
 
-
-                    catch (MalformedURLException mal) {
-
-                    }
-
-                    catch (IOException ioe) {
+                    } catch (IOException ioe) {
 
                         String today = ioe.getMessage();
 
@@ -165,9 +159,9 @@ public class NewsViewModel extends AndroidViewModel {
 
     }
 
-    public void loadNewsArticles(final String  search,
-                                  final onDataUpdateListener dataChange,
-                                  final Activity context) {
+    public void loadNewsArticles(final String search,
+                                 final onDataUpdateListener dataChange,
+                                 final Activity context) {
 
         if (newsArticlesList != null && newsArticlesList.getValue() != null) {
             newsArticlesList.getValue().clear();
@@ -188,7 +182,7 @@ public class NewsViewModel extends AndroidViewModel {
                         String searchString = searchText.getValue().toString();
 
                         String API_PATH =
-                                String.format("https://content.guardianapis.com/tags?q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f&show-tags=contributor", searchString);
+                                String.format("https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
 
 
                         URL url;
@@ -285,7 +279,6 @@ public class NewsViewModel extends AndroidViewModel {
             }
 
 
-
             for (int i = 0; i < results.length(); i++) {
 
                 JSONObject tempNA = results.getJSONObject(i);
@@ -300,20 +293,62 @@ public class NewsViewModel extends AndroidViewModel {
                 na.sectionName = tempNA.getString("sectionName");
                 na.type = tempNA.getString("type");
 
+                na.tags =  getTags(tempNA);
+
                 returnResults.add(na);
 
             }
 
             return returnResults;
 
-        }
-
-        catch(Exception ex) {
+        } catch (Exception ex) {
 
             String aaa = ex.getMessage();
 
         }
-return returnResults;
+        return returnResults;
+    }
+
+    private ArrayList<ArticleTags> getTags(JSONObject tempNA) {
+
+        if (!tempNA.has("tags")) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<ArticleTags> tags = new ArrayList<>();
+
+        try {
+            JSONArray array = tempNA.getJSONArray("tags");
+
+            for(int i = 0; i < array.length(); i++) {
+
+                JSONObject obj = array.getJSONObject(i);
+
+                ArticleTags tag = new ArticleTags();
+                tag.firstName = (obj.has("firstName")) ? obj.getString("firstName") : "";
+                tag.lastName = (obj.has("lastName")) ? obj.getString("lastName") : "";
+                tag.bylineImageUrl = (obj.has("bylineImageUrl")) ? obj.getString("bylineImageUrl") : "";
+                tag.apiUrl = (obj.has("apiUrl")) ? obj.getString("apiUrl") : "";
+                tag.bio = (obj.has("bio")) ? obj.getString("bio") : "";
+                tag.id = (obj.has("id")) ? obj.getString("id") : "";
+                tag.type = (obj.has("type")) ? obj.getString("type") : "";
+                tag.webTitle = (obj.has("webTitle")) ? obj.getString("webTitle") : "";
+                tag.webUrl = (obj.has("webUrl")) ? obj.getString("webUrl") : "";
+
+                tags.add(tag);
+            }
+
+
+        }
+        catch (JSONException jsone) {
+
+        }
+
+        catch (Exception e) {
+
+        }
+
+        return tags;
     }
 
     public void updateSearchText(String value, RecyclerView.Adapter adapter, Activity context) {
@@ -322,7 +357,6 @@ return returnResults;
         loadNewsArticles(searchText.toString(), new Linker(adapter), context);
 
     }
-
 
 
     public class Linker implements onDataUpdateListener {
@@ -340,9 +374,8 @@ return returnResults;
             try {
                 adapter.notifyDataSetChanged();
 
-                if (newsArticlesList.getValue() != null &&  newsArticlesList.getValue().size() == 0) {
+                if (newsArticlesList.getValue() != null && newsArticlesList.getValue().size() == 0) {
                     int aaaa = newsArticlesList.getValue().size();
-
 
 
                     noRecordText.setValue("No Articles Found");
@@ -357,14 +390,12 @@ return returnResults;
 
 
                 Log.d("HELPD", "adapter Data set has changed from Linker class");
-                Log.d("HELPD", "No Data " + showNoData );
-            }
-            catch(IndexOutOfBoundsException iox) {
+                Log.d("HELPD", "No Data " + showNoData);
+            } catch (IndexOutOfBoundsException iox) {
 
                 String aaaa = iox.getMessage();
 
-            }
-            catch(Exception iox) {
+            } catch (Exception iox) {
 
                 String aaaa = iox.getMessage();
 
