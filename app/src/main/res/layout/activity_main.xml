@@ -17,20 +17,50 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/image_incomplete_survey_drawer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                     />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="44dp"
             android:fontFamily="@font/lato_bold"
             android:text="New App Stage 1"
             android:textSize="28sp"
             android:typeface="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:layout_editor_absoluteX="76dp"
             tools:text="New App Stage 1" />
 
         <EditText

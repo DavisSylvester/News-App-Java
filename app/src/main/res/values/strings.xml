@@ -2,4 +2,10 @@
     <string name="app_name">NewAppS1</string>
     <string name="btnGetNews">Get News</string>
     <string name="noData">No Articles Found</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="save_setting">Save</string>
+    <string name="cancel_setting">Cancel</string>
+    <string name="firstNamePreference">FirstName</string>
+    <string name="firstName">First Name</string>
 </resources>

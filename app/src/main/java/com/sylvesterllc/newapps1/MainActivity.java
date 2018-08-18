@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +15,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import com.sylvesterllc.newapps1.Adapters.NewsAdapater;
+import com.sylvesterllc.newapps1.Fragments.SettingsDialogFragment;
 import com.sylvesterllc.newapps1.Loaders.NewsArticleLoader;
 import com.sylvesterllc.newapps1.Models.NewsViewModel;
 import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
@@ -27,6 +32,7 @@ import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity
 {
 
+    private String TAG = "HelpD";
     private RecyclerView mRecycleView;
     public RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mlayoutManager;
@@ -50,6 +56,24 @@ public class MainActivity extends AppCompatActivity
 
         loadListeners();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.d(TAG, item.toString());
+
+        DialogFragment dialog = new SettingsDialogFragment();
+        dialog.show(getSupportFragmentManager(), "dialog1");
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
 
     protected void loadListeners() {
 
