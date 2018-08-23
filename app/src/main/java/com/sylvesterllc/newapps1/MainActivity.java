@@ -2,14 +2,9 @@ package com.sylvesterllc.newapps1;
 
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,10 +17,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import com.sylvesterllc.newapps1.Adapters.NewsAdapater;
-import com.sylvesterllc.newapps1.Fragments.SettingsDialogFragment;
-import com.sylvesterllc.newapps1.Loaders.NewsArticleLoader;
 import com.sylvesterllc.newapps1.Models.NewsViewModel;
 import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
+import com.sylvesterllc.newapps1.*;
+
 
 
 
@@ -62,8 +57,9 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(TAG, item.toString());
 
-        DialogFragment dialog = new SettingsDialogFragment();
-        dialog.show(getSupportFragmentManager(), "dialog1");
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivity(i);
+
         return true;
     }
 
@@ -108,8 +104,6 @@ public class MainActivity extends AppCompatActivity
         }
         String temp = txtSearchNews.getText().toString();
         newsViewModel.updateSearchText(temp, mAdapter, this);
-//        RecyclerView.Adapter aaa =   mRecycleView.getAdapter();
-//        aaa.notify();
 
         mAdapter.notifyDataSetChanged();
     }

@@ -6,6 +6,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.BindingAdapter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -38,6 +39,8 @@ public class NewsViewModel extends AndroidViewModel {
 
     private onDataUpdateListener listener;
     public ActivityMainBinding binding;
+
+    private static  boolean isInitialLoad = true;
 
     public MutableLiveData<String> searchText;
     public MutableLiveData<String> searchHintText;
@@ -79,6 +82,8 @@ public class NewsViewModel extends AndroidViewModel {
 
         if (newsArticlesList == null) {
             newsArticlesList = new MutableLiveData();
+
+
             loadNewsArticlesInitially(searchText.toString());
         }
         return newsArticlesList;
@@ -98,8 +103,14 @@ public class NewsViewModel extends AndroidViewModel {
 
                     String searchString = searchText.getValue().toString();
 
+                    // Get Preference Text
+                    SharedPreferences sharedPref = getApplication().getSharedPreferences("settings", Context.MODE_PRIVATE);
+                    String tempResult = sharedPref.getString("FirstName", "");
+
                     String API_PATH =
-                            String.format("https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
+                            String.format(
+                                    "https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f",
+                                    (tempResult.length() == 0) ? searchString : tempResult);
 
 
                     URL url;
@@ -175,9 +186,25 @@ public class NewsViewModel extends AndroidViewModel {
                     try {
 
                         String searchString = searchText.getValue().toString();
+                        String searchTextResult = "";
+
+                        if (isInitialLoad) {
+
+                            isInitialLoad = false;
+                            // Get Preference Text
+                            SharedPreferences sharedPref = getApplication().getSharedPreferences("settings", Context.MODE_PRIVATE);
+                            String tempResult = sharedPref.getString("FirstName", "");
+
+                            searchTextResult = (tempResult.length() == 0) ? searchString : tempResult;
+                        }
+                        else {
+                            searchTextResult = searchString;
+                        }
+
 
                         String API_PATH =
-                                String.format("https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f", searchString);
+                                String.format("https://content.guardianapis.com/search?show-tags=contributor&q=%s&api-key=e9e16519-7502-46af-b08f-47f5fdd4535f",
+                                        searchTextResult);
 
                         URL url;
                         String result = "";
@@ -283,6 +310,7 @@ public class NewsViewModel extends AndroidViewModel {
                 na.webTitle = (tempNA.has("webTitle")) ? tempNA.getString("webTitle") : "";
                 na.sectionName = tempNA.getString("sectionName");
                 na.type = tempNA.getString("type");
+                na.webPublicationDate = (tempNA.has("webPublicationDate")) ? tempNA.getString("webPublicationDate") : "";
 
                 na.tags = getTags(tempNA);
 

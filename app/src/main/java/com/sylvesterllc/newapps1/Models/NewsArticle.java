@@ -12,6 +12,7 @@ public class NewsArticle {
     public String webUrl = "";
     public String apiUrl = "";
     public String description = "";
+    public String webPublicationDate = "";
     public ArrayList<ArticleTags> tags = new ArrayList<>();
 
 
@@ -20,7 +21,7 @@ public class NewsArticle {
 
     public NewsArticle(String ID, String Type, String SectionID, String SectionName,
                        String WebTitle, String WebUrl, String ApiUrl,
-                       String desc, ArrayList<ArticleTags> tags){
+                       String desc, ArrayList<ArticleTags> tags, String WebPublicationDate){
 
         id = ID;
         type = Type;
@@ -30,6 +31,7 @@ public class NewsArticle {
         webUrl = WebUrl;
         apiUrl = ApiUrl;
         description = desc;
+        webPublicationDate = WebPublicationDate;
         this.tags = tags;
     }
 }

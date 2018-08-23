@@ -8,4 +8,6 @@
     <string name="cancel_setting">Cancel</string>
     <string name="firstNamePreference">FirstName</string>
     <string name="firstName">First Name</string>
+    <string name="search_text">Search Filter</string>
+    <string name="previous">Previous</string>
 </resources>

@@ -15,10 +15,15 @@ import com.sylvesterllc.newapps1.MainActivity;
 import com.sylvesterllc.newapps1.Models.GuardApiData;
 import com.sylvesterllc.newapps1.Models.NewsArticle;
 import com.sylvesterllc.newapps1.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> {
 
+    private final String TAG = "NewAdapter";
     private Context context;
     private GuardApiData fullData;
     private MutableLiveData<ArrayList<NewsArticle>> data1 = new MutableLiveData<>();
@@ -26,17 +31,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
     public NewsAdapater(Context ctx, final MainActivity act, MutableLiveData<ArrayList<NewsArticle>> article) {
 
         context = ctx;
-//        new NewsService(context).GetNews(new onDataChangerListener() {
-//            @Override
-//            public void onDataChange(ArrayList<NewsArticle> data) {
-//
-//                data1 = data;
-//                act.mAdapter.notifyDataSetChanged();
-//
-//            }
-//        });
         data1 = article;
-
     }
 
     @NonNull
@@ -64,11 +59,13 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        private final String TAG = "NewAdapter - ViewHolder";
         TextView articleName;
         TextView sectionName;
         TextView sectionID;
         TextView desc;
         TextView webTitle;
+        TextView webPublishDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,6 +75,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             sectionID = itemView.findViewById(R.id.txtSectionID);
             desc = itemView.findViewById(R.id.txtDesc);
             webTitle = itemView.findViewById(R.id.txtWebTitle);
+            webPublishDate = itemView.findViewById(R.id.txtPublishDate);
         }
 
         public void bindItem(final NewsArticle att, final Context context) {
@@ -87,6 +85,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             sectionID.setText(att.sectionId);
             desc.setText(att.description);
             webTitle.setText((att.tags.size() == 0) ? "" : att.tags.get(0).webTitle);
+            webTitle.setText((att.webPublicationDate.toString().length() == 0) ? "" : att.webPublicationDate);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,5 +101,6 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
                 }
             });
         }
+
     }
 }

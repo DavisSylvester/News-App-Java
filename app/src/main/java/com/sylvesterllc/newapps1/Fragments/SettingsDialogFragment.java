@@ -46,8 +46,6 @@ public class SettingsDialogFragment extends DialogFragment {
 
         editFirstName.setText(firstName);
 
-        // Map<String> aaa = sharedPref.getAll();
-
         builder.setView(view)
 
             .setPositiveButton(R.string.save_setting, new DialogInterface.OnClickListener() {
@@ -56,13 +54,9 @@ public class SettingsDialogFragment extends DialogFragment {
 
                     Log.d(TAG, "Save button clicked");
 
-                    // SharedPreferences.Editor editor = sharedPref.edit();
-
                     sharedPref.edit().putString("FirstName", editFirstName.getText().toString()).commit();
 
                     Log.d(TAG, editFirstName.getText().toString());
-
-
                 }
             })
 
@@ -72,9 +66,6 @@ public class SettingsDialogFragment extends DialogFragment {
                     Log.d(TAG, "Cancel button clicked");
                 }
             });
-
-
-
 
         return builder.create();
     }
