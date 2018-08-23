@@ -55,12 +55,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:fontFamily="@font/lato_bold"
-            android:text="New App Stage 1"
+            android:text="@string/app_title"
             android:textSize="28sp"
             android:typeface="normal"
-            app:layout_constraintTop_toTopOf="@id/toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteX="76dp"
+            app:layout_constraintTop_toTopOf="@id/toolbar"
             tools:text="New App Stage 1" />
 
         <EditText
