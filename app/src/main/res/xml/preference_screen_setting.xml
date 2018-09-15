@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Setting Title">
+
+    <EditTextPreference
+        android:dialogTitle="Search Text"
+        android:key="FirstName"
+        android:singleLine="true"
+        android:summary="hello summary"
+        android:text="1111"
+        android:title="Default Search Text" />
+
+    </PreferenceScreen>
