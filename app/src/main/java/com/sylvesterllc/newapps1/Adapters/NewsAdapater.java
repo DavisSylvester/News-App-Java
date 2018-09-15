@@ -16,10 +16,7 @@ import com.sylvesterllc.newapps1.Models.GuardApiData;
 import com.sylvesterllc.newapps1.Models.NewsArticle;
 import com.sylvesterllc.newapps1.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> {
 
@@ -66,6 +63,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
         TextView desc;
         TextView webTitle;
         TextView webPublishDate;
+        TextView authorsName;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -74,8 +72,9 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             sectionName = itemView.findViewById(R.id.txtSectionName);
             sectionID = itemView.findViewById(R.id.txtSectionID);
             desc = itemView.findViewById(R.id.txtDesc);
-            webTitle = itemView.findViewById(R.id.txtWebTitle);
+            webTitle = itemView.findViewById(R.id.txtAuthorName);
             webPublishDate = itemView.findViewById(R.id.txtPublishDate);
+            authorsName = itemView.findViewById(R.id.txtAuthorName);
         }
 
         public void bindItem(final NewsArticle att, final Context context) {
@@ -86,6 +85,7 @@ public class NewsAdapater extends RecyclerView.Adapter<NewsAdapater.ViewHolder> 
             desc.setText(att.description);
             webTitle.setText((att.tags.size() == 0) ? "" : att.tags.get(0).webTitle);
             webTitle.setText((att.webPublicationDate.toString().length() == 0) ? "" : att.webPublicationDate);
+            authorsName.setText(((att.tags.size() == 0) ? "" : att.tags.get(0).authorFullName ));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

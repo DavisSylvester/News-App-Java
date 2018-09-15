@@ -52,11 +52,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtWebTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtAuthorName"
         tools:text="Information about the Guardian news app for Android" />
 
     <TextView
-        android:id="@+id/txtWebTitle"
+        android:id="@+id/txtAuthorName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -78,7 +78,7 @@
         android:layout_marginTop="8dp"
         android:textAlignment="viewEnd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtWebTitle"
+        app:layout_constraintStart_toEndOf="@+id/txtAuthorName"
         app:layout_constraintTop_toBottomOf="@+id/txtSectionName" />
 
     <android.support.constraint.Guideline

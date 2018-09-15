@@ -33,5 +33,6 @@ public class NewsArticle {
         description = desc;
         webPublicationDate = WebPublicationDate;
         this.tags = tags;
+
     }
 }

@@ -314,6 +314,7 @@ public class NewsViewModel extends AndroidViewModel {
 
                 na.tags = getTags(tempNA);
 
+
                 returnResults.add(na);
 
             }
@@ -353,7 +354,7 @@ public class NewsViewModel extends AndroidViewModel {
                 tag.type = (obj.has("type")) ? obj.getString("type") : "";
                 tag.webTitle = (obj.has("webTitle")) ? obj.getString("webTitle") : "";
                 tag.webUrl = (obj.has("webUrl")) ? obj.getString("webUrl") : "";
-
+                tag.authorFullName = (obj.has("firstName") && obj.has("lastName")) ? tag.firstName + " " + tag.lastName : "";
                 tags.add(tag);
             }
 

@@ -11,6 +11,7 @@ public class ArticleTags {
     public String bylineImageUrl = "";
     public String firstName = "";
     public String lastName = "";
+    public String authorFullName = "";
 
     public ArticleTags() {}
 
@@ -26,5 +27,6 @@ public class ArticleTags {
         bylineImageUrl = BylineImageUrl;
         firstName = FirstName;
         lastName = LastName;
+        authorFullName = firstName + " " + lastName;
     }
 }
