@@ -3,8 +3,11 @@ package com.sylvesterllc.newapps1;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,16 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
 import com.sylvesterllc.newapps1.Adapters.NewsAdapater;
 import com.sylvesterllc.newapps1.Models.NewsViewModel;
 import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
 import com.sylvesterllc.newapps1.*;
 
 
-
-
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
 
     private String TAG = "HelpD";
     private RecyclerView mRecycleView;
@@ -36,15 +37,12 @@ public class MainActivity extends AppCompatActivity
     private NewsViewModel newsViewModel;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-
-//        setContentView(R.layout.activity_main);
         mRecycleView = findViewById(R.id.rvNewsList);
 
         setDefaults(binding);
@@ -69,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
-
 
     protected void loadListeners() {
 
@@ -107,7 +104,6 @@ public class MainActivity extends AppCompatActivity
 
         mAdapter.notifyDataSetChanged();
     }
-
 
     private void setDefaults(ActivityMainBinding binding) {
 

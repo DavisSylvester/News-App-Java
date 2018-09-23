@@ -7,8 +7,8 @@
         android:dialogTitle="Search Text"
         android:key="FirstName"
         android:singleLine="true"
-        android:summary="hello summary"
-        android:text="1111"
+        android:summary=""
+        android:text=""
         android:title="Default Search Text" />
 
     </PreferenceScreen>

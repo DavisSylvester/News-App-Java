@@ -43,10 +43,4 @@ public class NewsService {
         context = ctx;
     }
 
-    public void GetNewsOverHttps() {
-
-        new NewsArticleLoader(context).loadInBackground();
-
-
-    }
 }

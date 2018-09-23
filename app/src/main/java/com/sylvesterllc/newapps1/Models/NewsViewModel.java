@@ -7,17 +7,14 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.databinding.BindingAdapter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-
-// import com.google.gson.Gson;
 import com.sylvesterllc.newapps1.Interfaces.onDataUpdateListener;
-import com.sylvesterllc.newapps1.MainActivity;
 import com.sylvesterllc.newapps1.databinding.ActivityMainBinding;
 
 import org.json.JSONArray;
@@ -53,7 +50,6 @@ public class NewsViewModel extends AndroidViewModel {
     public NewsViewModel(@NonNull Application application) {
         super(application);
 
-
         setDefaults();
     }
 
@@ -64,7 +60,10 @@ public class NewsViewModel extends AndroidViewModel {
         showNoData.setValue(View.VISIBLE);
         showRecyclerView.setValue(View.VISIBLE);
 
-        searchText.setValue("computer");
+        String tempSearch = PreferenceManager.getDefaultSharedPreferences(getApplication())
+                .getString("FirstName", "");
+
+        searchText.setValue((tempSearch == "") ? "computer" : tempSearch);
 
         searchHintText.setValue("Enter New Search");
     }
@@ -191,6 +190,7 @@ public class NewsViewModel extends AndroidViewModel {
                         if (isInitialLoad) {
 
                             isInitialLoad = false;
+
                             // Get Preference Text
                             SharedPreferences sharedPref = getApplication().getSharedPreferences("settings", Context.MODE_PRIVATE);
                             String tempResult = sharedPref.getString("FirstName", "");

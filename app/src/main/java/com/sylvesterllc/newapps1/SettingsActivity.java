@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
@@ -23,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+
         sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
 
         searchTextPreference = sharedPref.getString("FirstName", "");
@@ -34,8 +36,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         Log.d("HELP", sharedPref.getString("FirstName", ""));
 
-    }
 
+    }
 
 
     public static class SettingsPreferenceFragment extends PreferenceFragment {
@@ -44,53 +46,40 @@ public class SettingsActivity extends AppCompatActivity {
         private EditTextPreference fName;
         private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preference_screen_setting);
 
             fName = (EditTextPreference) findPreference("FirstName");
-
-            createListener();
+            PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(getActivity());
+            createListener(screen);
 
         }
 
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                              String key) {
-            updatePrefSummary(findPreference(key));
-        }
-
-        private void updatePrefSummary(android.preference.Preference p) {
-
-//            Log.d("HELP", p.getKey("FirstName").toString());
-//            Context ctx = getContext();
-//            ctx.getSharedPreferences("settings", Context.MODE_PRIVATE)
-//                    .edit().putString("FirstName", searchTextPreference).commit();FirstName
-        }
-
-        private void createListener() {
+        private void createListener(final PreferenceScreen screen) {
             listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(
                         SharedPreferences sharedPreferences, String key) {
                     String value = sharedPreferences.getString("FirstName", "");
 
+                    fName.setText(value);
+                    fName.setSummary(value);
 
-                        fName.setText(value);
-                        setPreferenceScreen(null);
-                        addPreferencesFromResource(R.xml.preference_screen_setting);
+                    setPreferenceScreen(null);
+
+                    addPreferencesFromResource(R.xml.preference_screen_setting);
 
                 }
             };
-            getDefaultSharedPreferences(getActivity().getApplicationContext())
+            getDefaultSharedPreferences(getActivity().getBaseContext())
+
                     .registerOnSharedPreferenceChangeListener(listener);
         }
 
     }
-
-
-
-
 
 
 }
