@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecycleView;
     public RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mlayoutManager;
-    private EditText txtSearchNews;
+    public EditText txtSearchNews;
 
-    private NewsViewModel newsViewModel;
+    public NewsViewModel newsViewModel;
 
 
     @Override
@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         mRecycleView = findViewById(R.id.rvNewsList);
 
         setDefaults(binding);
+
+        getValueFromSharedPreferences();
 
         loadListeners();
     }
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getNews(View view) {
-        txtSearchNews = findViewById(R.id.txtSearchNews);
+
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
 
@@ -107,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDefaults(ActivityMainBinding binding) {
 
+        txtSearchNews = findViewById(R.id.txtSearchNews);
+
         newsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
 
         binding.setLifecycleOwner(this);
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.setModel(newsViewModel);
 
-        mAdapter = new NewsAdapater(this, this, newsViewModel.newsArticlesList);
+        mAdapter = new NewsAdapater(this, newsViewModel.newsArticlesList);
 
         mlayoutManager = new LinearLayoutManager(this);
 
@@ -129,11 +133,22 @@ public class MainActivity extends AppCompatActivity {
 
         mRecycleView.setLayoutManager(mlayoutManager);
 
-        NewsViewModel nvm = new NewsViewModel(getApplication());
-
-        newsViewModel.loadNewsArticles("murder", new NewsViewModel(getApplication()).new Linker(mAdapter), this);
+        newsViewModel.loadNewsArticles("murder",
+                new NewsViewModel(getApplication()).new Linker(mAdapter), this);
 
 
     }
 
+    public void getValueFromSharedPreferences() {
+
+        String tempSearch = PreferenceManager.getDefaultSharedPreferences(getApplication())
+                .getString("FirstName", "");
+
+        String searchText = txtSearchNews.getText().toString();
+
+        if (searchText.equals("") &&
+                !tempSearch.equals("")) {
+            txtSearchNews.setText(tempSearch);
+        }
+    }
 }

@@ -24,8 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-
-        sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        sharedPref = getDefaultSharedPreferences(this);
 
         searchTextPreference = sharedPref.getString("FirstName", "");
 
@@ -33,16 +32,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         sharedPref.edit().putString("FirstName", searchTextPreference).commit();
 
-
         Log.d("HELP", sharedPref.getString("FirstName", ""));
-
 
     }
 
 
     public static class SettingsPreferenceFragment extends PreferenceFragment {
 
-        private String oldValue;
         private EditTextPreference fName;
         private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -53,25 +49,26 @@ public class SettingsActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.preference_screen_setting);
 
             fName = (EditTextPreference) findPreference("FirstName");
+
+            fName.setSummary(getDefaultSharedPreferences(getActivity())
+                    .getString("FirstName", null));
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(getActivity());
-            createListener(screen);
+
+            SharedPreferences sp = getDefaultSharedPreferences(getActivity());
+            createListener(screen, sp);
 
         }
 
-        private void createListener(final PreferenceScreen screen) {
+        private void createListener(final PreferenceScreen screen, final SharedPreferences sp) {
             listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(
                         SharedPreferences sharedPreferences, String key) {
-                    String value = sharedPreferences.getString("FirstName", "");
+                    String value = sp.getString("FirstName", null);
 
                     fName.setText(value);
                     fName.setSummary(value);
-
                     setPreferenceScreen(null);
-
-                    addPreferencesFromResource(R.xml.preference_screen_setting);
-
                 }
             };
             getDefaultSharedPreferences(getActivity().getBaseContext())

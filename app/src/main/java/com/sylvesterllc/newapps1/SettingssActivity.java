@@ -23,7 +23,7 @@ public class SettingssActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        sharedPref =  getSharedPreferences("settings", Context.MODE_PRIVATE);
         editFirstName = findViewById(R.id.txtSearchText);
         result = findViewById(R.id.txtReturnValue);
         firstName = sharedPref.getString("FirstName", "");
@@ -36,14 +36,10 @@ public class SettingssActivity extends AppCompatActivity {
     public void btnSave(View view) {
 
         sharedPref.edit().putString("FirstName", editFirstName.getText().toString()).commit();
-
-
-
         result.setText(editFirstName.getText().toString());
     }
 
     public void btnPrevious(View view) {
-
         finish();
     }
 }

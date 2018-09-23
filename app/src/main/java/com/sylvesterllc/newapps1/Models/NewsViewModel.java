@@ -34,11 +34,8 @@ import java.util.ArrayList;
 
 public class NewsViewModel extends AndroidViewModel {
 
-    private onDataUpdateListener listener;
     public ActivityMainBinding binding;
-
     private static  boolean isInitialLoad = true;
-
     public MutableLiveData<String> searchText;
     public MutableLiveData<String> searchHintText;
     public MutableLiveData<ArrayList<NewsArticle>> newsArticlesList;
@@ -375,7 +372,6 @@ public class NewsViewModel extends AndroidViewModel {
 
     }
 
-
     public class Linker implements onDataUpdateListener {
 
         public RecyclerView.Adapter adapter;
@@ -392,8 +388,6 @@ public class NewsViewModel extends AndroidViewModel {
                 adapter.notifyDataSetChanged();
 
                 if (newsArticlesList.getValue() != null && newsArticlesList.getValue().size() == 0) {
-                    int aaaa = newsArticlesList.getValue().size();
-
 
                     noRecordText.setValue("No Articles Found");
 
@@ -405,16 +399,11 @@ public class NewsViewModel extends AndroidViewModel {
                     binding.notifyChange();
                 }
 
-
                 Log.d("HELPD", "adapter Data set has changed from Linker class");
                 Log.d("HELPD", "No Data " + showNoData);
             } catch (IndexOutOfBoundsException iox) {
 
-                String aaaa = iox.getMessage();
-
             } catch (Exception iox) {
-
-                String aaaa = iox.getMessage();
 
             }
         }
